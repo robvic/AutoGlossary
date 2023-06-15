@@ -31,12 +31,15 @@ definitio: Programming interface for web documents. It represents the page so th
 
 concept: Class Diagram (Computer Science / Software Engineering)
 definition: A graphical representation of the structure of a class in object-oriented programming. It shows the classes, their attributes, and the relationships between them. Class diagrams are used to model the design of a software system and to communicate it to other developers.
+
 '''
+    label = 'concept: '
+    label_offset = len('definition: ')
     response = model.predict(
-        header+content,
+        header+label+content,
         temperature=temperature,
         max_output_tokens=max_decode_steps,
         top_k=top_k,
-        top_p=top_p,)
+        top_p=top_p)
     print(f"Response from Model: {response.text}")
-    return response.text[12:]
+    return response.text[label_offset:]
