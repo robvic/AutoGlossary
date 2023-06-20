@@ -2,6 +2,7 @@
 import time
 import glob
 import re
+import hashlib
 import pandas as pd
 import defGen
 
@@ -27,9 +28,18 @@ else:
 list = pd.read_excel(current_file).fillna('')
 
 # Limit variable
-LIMIT = 1
+LIMIT = 5
 COUNTER_MAX = 10
 counter = 0
+
+# Create an ID column
+# Function to generate row keys
+list['ID'] = ''
+def generateHash(*args):
+    concatenated_args = ''.join(map(str,args))
+    hashed_id = hashlib.sha256(concatenated_args.encode()).hexdigest()
+    print(hashed_id)
+    return hashed_id
 
 # Iterate over values
 # Stop whenever limit is reached
@@ -54,6 +64,9 @@ for index, row in list.iterrows():
 
     # Fill value
     list.at[index, 'Definition'] = res
+
+    # Apply ID
+    list.at[index, 'ID'] = generateHash(mnemonic,concept,field,subfield)
 
 # Save copy
 # Add new version
